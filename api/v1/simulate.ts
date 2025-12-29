@@ -4,8 +4,11 @@ import { validateRequest, checkCapacityWarning } from '../../src/api/validation.
 import type { SimulationResponse, SimulationMetadata, ErrorResponse, Scenario, SimulationConfig } from '../../src/types/index.js';
 
 const ENGINE_VERSION = '1.0.0';
+
+// Reduced iterations for serverless environment (10s timeout on Vercel Hobby)
+// 100 iterations provides reasonable statistical confidence while staying within limits
 const DEFAULT_CONFIG: SimulationConfig = {
-  iterations: 500,
+  iterations: 100,
   master_seed: 42,
   warm_up_minutes: 30,
   stabilization_buffer_minutes: 60,
