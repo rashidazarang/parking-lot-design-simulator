@@ -40,10 +40,18 @@ export function ScenarioList() {
   const anyRunning = scenarios.some(s => s.isRunning) || isRunningAll;
 
   return (
-    <div className="bg-white border-b border-gray-200">
+    <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-4 py-3 flex items-center justify-between border-b border-gray-100">
-        <h2 className="text-sm font-semibold text-gray-700">Scenarios</h2>
+      <div className="px-4 py-3 flex items-center justify-between bg-gradient-to-r from-gray-50/80 to-white border-b border-gray-100">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
+            <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h2 className="text-sm font-semibold text-gray-700">Scenarios</h2>
+          <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{scenarios.length}/10</span>
+        </div>
         <div className="flex items-center gap-2">
           <Button
             size="sm"
@@ -51,6 +59,7 @@ export function ScenarioList() {
             onClick={addScenario}
             disabled={scenarios.length >= 10}
             title="Add Scenario"
+            className="!px-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -62,40 +71,47 @@ export function ScenarioList() {
             onClick={runAllScenarios}
             disabled={anyRunning}
             isLoading={isRunningAll}
+            className="shadow-md shadow-blue-500/20"
           >
+            <svg className="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
             Run All
           </Button>
         </div>
       </div>
 
       {/* Scenario Tabs */}
-      <div className="flex overflow-x-auto">
-        {scenarios.map((s) => (
+      <div className="flex overflow-x-auto bg-gray-50/50">
+        {scenarios.map((s, index) => (
           <div
             key={s.id}
             className={cn(
-              'group flex items-center gap-2 px-4 py-2 border-r border-gray-100 cursor-pointer min-w-0',
+              'group flex items-center gap-2.5 px-4 py-2.5 cursor-pointer min-w-0 transition-all',
+              index !== scenarios.length - 1 && 'border-r border-gray-200/60',
               activeScenarioId === s.id
-                ? 'bg-primary-50 border-b-2 border-b-primary-500'
-                : 'hover:bg-gray-50'
+                ? 'bg-white shadow-sm border-b-2 border-b-blue-500'
+                : 'hover:bg-white/60'
             )}
             onClick={() => setActiveScenario(s.id)}
           >
             {/* Status indicator */}
             <div className="flex-shrink-0">
               {s.isRunning ? (
-                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse ring-4 ring-blue-500/20" />
               ) : s.result ? (
                 <div
                   className={cn(
-                    'w-2 h-2 rounded-full',
-                    s.result.passed ? 'bg-green-500' : 'bg-red-500'
+                    'w-2.5 h-2.5 rounded-full ring-4',
+                    s.result.passed
+                      ? 'bg-emerald-500 ring-emerald-500/20'
+                      : 'bg-red-500 ring-red-500/20'
                   )}
                 />
               ) : s.isDirty ? (
-                <div className="w-2 h-2 rounded-full bg-amber-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-400 ring-4 ring-amber-400/20" />
               ) : (
-                <div className="w-2 h-2 rounded-full bg-gray-300" />
+                <div className="w-2.5 h-2.5 rounded-full bg-gray-300 ring-4 ring-gray-300/20" />
               )}
             </div>
 
@@ -107,37 +123,42 @@ export function ScenarioList() {
                 onChange={(e) => setEditName(e.target.value)}
                 onBlur={finishEditing}
                 onKeyDown={handleKeyDown}
-                className="text-sm bg-white border border-gray-300 rounded px-2 py-0.5 w-32 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                className="text-sm bg-white border border-blue-300 rounded-md px-2 py-1 w-32 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 autoFocus
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
               <span
-                className="text-sm font-medium text-gray-700 truncate max-w-[120px]"
+                className={cn(
+                  'text-sm font-medium truncate max-w-[120px] transition-colors',
+                  activeScenarioId === s.id ? 'text-gray-900' : 'text-gray-600'
+                )}
                 onDoubleClick={(e) => {
                   e.stopPropagation();
                   startEditing(s);
                 }}
-                title={s.scenario.name}
+                title={`${s.scenario.name} (double-click to rename)`}
               >
                 {s.scenario.name}
               </span>
             )}
 
             {/* Actions - visible on hover */}
-            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-auto">
+            <div className={cn(
+              'flex items-center gap-0.5 transition-opacity ml-auto',
+              activeScenarioId === s.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+            )}>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   runScenario(s.id);
                 }}
                 disabled={anyRunning}
-                className="p-1 text-gray-400 hover:text-primary-600 disabled:opacity-50"
+                className="p-1.5 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 disabled:opacity-50 transition-colors"
                 title="Run"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
                 </svg>
               </button>
               <button
@@ -146,7 +167,7 @@ export function ScenarioList() {
                   duplicateScenario(s.id);
                 }}
                 disabled={scenarios.length >= 10}
-                className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-50"
+                className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 disabled:opacity-50 transition-colors"
                 title="Duplicate"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +180,7 @@ export function ScenarioList() {
                   removeScenario(s.id);
                 }}
                 disabled={scenarios.length <= 1}
-                className="p-1 text-gray-400 hover:text-red-600 disabled:opacity-50"
+                className="p-1.5 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-50 transition-colors"
                 title="Delete"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
