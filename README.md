@@ -2,8 +2,6 @@
 
 A deterministic, auditable simulation engine to evaluate parking lot designs under varying demand, capacity, and exit configurations.
 
-![Parking Simulator Screenshot](docs/screenshot.png)
-
 ## Features
 
 - **Discrete-Event Simulation**: Accurate modeling of parking dynamics using DES
@@ -35,8 +33,8 @@ Then open http://localhost:3000 in your browser.
 ### 1. Clone and Install
 
 ```bash
-git clone <repository-url>
-cd parking-simulator
+git clone https://github.com/rashidazarang/parking-lot-design-simulator.git
+cd parking-lot-design-simulator
 
 # Install backend dependencies
 npm install
@@ -213,21 +211,9 @@ Health check endpoint.
 | `rejection_rate` | 0.05 | Threshold for capacity bottleneck |
 | `exit_p95_sla_minutes` | 3.0 | Threshold for exit bottleneck |
 
-## Manual Test Checklist
+## Contributing
 
-- [ ] Create 3 scenarios with different names
-- [ ] Duplicate a scenario and verify the copy appears
-- [ ] Rename a scenario by double-clicking its name
-- [ ] Delete a scenario (button appears on hover)
-- [ ] Run individual scenario and verify results appear
-- [ ] Run All scenarios and verify comparison table shows
-- [ ] Verify headline metrics (Capacity, Exit p95, Bottleneck) are visible
-- [ ] Click column headers in comparison table to sort
-- [ ] Expand "Show Details" to see full JSON metrics
-- [ ] Verify loading spinner appears during simulation
-- [ ] Verify toast notifications appear on completion
-- [ ] Resize browser to verify mobile layout (tabs for Inputs/Results)
-- [ ] Reset scenario to defaults and verify values update
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
