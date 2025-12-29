@@ -2,6 +2,10 @@
 
 A deterministic, auditable simulation engine to evaluate parking lot designs under varying demand, capacity, and exit configurations.
 
+<p align="center">
+  <img src="docs/images/screenshot-results.png" alt="Simulation Results" width="800">
+</p>
+
 ## Features
 
 - **Discrete-Event Simulation**: Accurate modeling of parking dynamics using DES
@@ -10,6 +14,29 @@ A deterministic, auditable simulation engine to evaluate parking lot designs und
 - **Monte Carlo Execution**: Multiple iterations with bootstrap confidence intervals
 - **Bottleneck Classification**: Automatic identification of capacity vs exit constraints
 - **Multi-Scenario Comparison**: Side-by-side analysis with sortable metrics table
+
+## Screenshots
+
+<details>
+<summary><strong>Configuration Panel</strong> - Set up demand, capacity, and queue parameters</summary>
+<p align="center">
+  <img src="docs/images/screenshot-inputs.png" alt="Configuration Panel" width="800">
+</p>
+</details>
+
+<details>
+<summary><strong>Multi-Scenario Management</strong> - Create and manage multiple scenarios</summary>
+<p align="center">
+  <img src="docs/images/screenshot-main.png" alt="Multi-Scenario Management" width="800">
+</p>
+</details>
+
+<details>
+<summary><strong>Scenario Comparison</strong> - Compare results across scenarios</summary>
+<p align="center">
+  <img src="docs/images/screenshot-comparison.png" alt="Scenario Comparison" width="800">
+</p>
+</details>
 
 ## Prerequisites
 
