@@ -227,22 +227,28 @@ export const useStore = create<Store>((set, get) => {
       });
 
       if (result.success) {
-        set(state => ({
+        // Create a map of results by scenario name for reliable matching
+        const resultsMap = new Map(
+          result.data.results.map(r => [r.scenario_name, r])
+        );
+
+        set(currentState => ({
           isRunningAll: false,
-          scenarios: state.scenarios.map((s, i) => ({
+          scenarios: currentState.scenarios.map(s => ({
             ...s,
             isRunning: false,
-            result: result.data.results[i] || null,
+            // Match by scenario name instead of index
+            result: resultsMap.get(s.scenario.name) || null,
             isDirty: false,
           })),
           lastMetadata: result.data.metadata,
           activeTab: 'results',
         }));
-        get().addToast('success', `All ${state.scenarios.length} scenarios completed`);
+        get().addToast('success', `All ${result.data.results.length} scenarios completed`);
       } else {
-        set(state => ({
+        set(currentState => ({
           isRunningAll: false,
-          scenarios: state.scenarios.map(s => ({
+          scenarios: currentState.scenarios.map(s => ({
             ...s,
             isRunning: false,
             error: result.error.error.message,
